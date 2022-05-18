@@ -1,0 +1,8 @@
+#,Name,Type 1,Type 2,Total,HP,Attack,Defense,Sp. Atk,Sp. Def,Speed,Generation,Legendary
+1,Bulbasaur,Grass,Poison,318,45,49,49,65,65,45,1,True
+2,Ivysaur,Ghost,Poison,318,45,49,49,65,65,45,1,False
+3,Venusaur,Steel,Poison,318,45,49,49,65,65,45,1,False
+4,Charmander2,Fire,,318,45,49,49,65,65,45,1,False
+4,Charmander,Bug,,318,45,49,49,65,65,45,1,False
+5,Charmeleon,Flying,,318,45,49,49,65,65,45,1,False
+6,GigiHadid,Fire,Flying,318,45,49,49,65,65,45,1,False

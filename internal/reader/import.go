@@ -49,7 +49,7 @@ func reviewer(path string) ([]*Pokemons, error) {
 	}
 
 	for _, a := range data {
-		str := strings.HasPrefix(a.Name, "G")
+		str := strings.Split(a.Name, "")
 
 		if a.Legendary == true {
 			//Exclude Legendary Pokémon
@@ -63,18 +63,32 @@ func reviewer(path string) ([]*Pokemons, error) {
 			//For Pokémon of Type: Steel, double their HP
 			a.HP = a.HP * 2
 			PokemonsSl = append(PokemonsSl, a)
-
+			
 		} else if a.Type1 == "Fire" || a.Type2 == "Fire" {
 			//For Pokémon of Type: Fire, lower their Attack by 10%
-			a.Attack = a.Attack - 10 //TODO Changing to percentt
+			percent := 10 / float64(a.Attack)
+			real := percent * 100
+			sub := float64(a.Attack) - real
+			a.Attack = int32(sub)
 			PokemonsSl = append(PokemonsSl, a)
 
-		} else if a.Type2 == "Flying" || a.Type1 == "Bug" {
-			//For Pokémon of Type: Bug & Flying, increase their Attack Speed by 10%
-			a.SpAtk = a.SpAtk + 10
+		} else if a.Type2 == "Flying" || a.Type1 == "Flying" {
+			//For Pokémon of Type: Flying, increase their Attack Speed by 10%
+			percent := 10 / float64(a.SpAtk)
+			real := percent * 100
+			sum := float64(a.SpAtk) + real
+			a.SpAtk = int32(sum)
 			PokemonsSl = append(PokemonsSl, a)
 
-		} else if str == true { //TODO this if not working
+		} else if a.Type2 == "Bug" || a.Type1 == "Bug" {
+			//For Pokémon of Type: Bug, increase their Attack Speed by 10%
+			percent := 10 / float64(a.SpAtk)
+			real := percent * 100
+			sum := float64(a.SpAtk) + real
+			a.SpAtk = int32(sum)
+			PokemonsSl = append(PokemonsSl, a)
+
+		} else if str[0] == "G" {
 			//For Pokémon that start with the letter **G**, add +5 Defense for every letter in their name (excluding **G**)
 			outG := strings.ReplaceAll(a.Name, "G", "")
 			outg := strings.ReplaceAll(outG, "g", "")

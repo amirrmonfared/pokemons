@@ -1,6 +1,6 @@
 CREATE TABLE "pokemons" (
   "id" bigserial PRIMARY KEY,
-  "name" varchar NOT NULL,
+  "name" varchar UNIQUE NOT NULL,
   "type1" varchar NOT NULL,
   "type2" varchar NOT NULL,
   "total" integer NOT NULL,
