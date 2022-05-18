@@ -117,18 +117,31 @@ func (q *Queries) GetPokemon(ctx context.Context, id int64) (Pokemon, error) {
 
 const listPokemons = `-- name: ListPokemons :many
 SELECT id, name, type1, type2, total, hp, attack, defense, sp_atk, sp_def, speed, generation, legendary, created_at FROM pokemons
+WHERE
+  hp = $1 AND
+  attack = $2 AND
+  defense = $3
 ORDER BY id
-LIMIT $1
-OFFSET $2
+LIMIT $4
+OFFSET $5
 `
 
 type ListPokemonsParams struct {
-	Limit  int32 `json:"limit"`
-	Offset int32 `json:"offset"`
+	Hp      int32 `json:"hp"`
+	Attack  int32 `json:"attack"`
+	Defense int32 `json:"defense"`
+	Limit   int32 `json:"limit"`
+	Offset  int32 `json:"offset"`
 }
 
 func (q *Queries) ListPokemons(ctx context.Context, arg ListPokemonsParams) ([]Pokemon, error) {
-	rows, err := q.db.QueryContext(ctx, listPokemons, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, listPokemons,
+		arg.Hp,
+		arg.Attack,
+		arg.Defense,
+		arg.Limit,
+		arg.Offset,
+	)
 	if err != nil {
 		return nil, err
 	}
