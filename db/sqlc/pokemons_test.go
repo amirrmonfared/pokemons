@@ -33,6 +33,7 @@ func createRandomPokemon(t *testing.T) Pokemon {
 	require.Equal(t, arg.Name, pokemon.Name)
 	require.Equal(t, arg.Type1, pokemon.Type1)
 	require.Equal(t, arg.Type2, pokemon.Type2)
+	require.Equal(t, arg.Total, pokemon.Total)
 	require.Equal(t, arg.Hp, pokemon.Hp)
 	require.Equal(t, arg.Attack, pokemon.Attack)
 	require.Equal(t, arg.Defense, pokemon.Defense)

@@ -22,6 +22,7 @@ func TestImportPokemon(t *testing.T) {
 				Name:       util.RandomString(4),
 				Type1:      util.RandomString(4),
 				Type2:      util.RandomString(4),
+				Total:      util.RandomInt(200, 500),
 				Hp:         util.RandomInt(1, 200),
 				Attack:     util.RandomInt(1, 100),
 				Defense:    util.RandomInt(1, 100),

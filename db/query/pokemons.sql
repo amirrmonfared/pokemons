@@ -3,6 +3,7 @@ INSERT INTO pokemons (
   name,
   type1,
   type2,
+  total,
   hp,
   attack,
   defense,
@@ -12,7 +13,7 @@ INSERT INTO pokemons (
   generation,
   legendary  
 ) VALUES (
-  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
+  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
 ) RETURNING *;
 
 -- name: GetPokemon :one

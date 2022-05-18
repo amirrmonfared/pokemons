@@ -59,6 +59,7 @@ func (store *SQLStore) ImportPokemon(ctx context.Context, arg CreatePokemonParam
 			Name:       arg.Name,
 			Type1:      arg.Type1,
 			Type2:      arg.Type2,
+			Total:      arg.Total,
 			Hp:         arg.Hp,
 			Attack:     arg.Attack,
 			Defense:    arg.Defense,

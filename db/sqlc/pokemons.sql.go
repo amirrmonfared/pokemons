@@ -14,6 +14,7 @@ INSERT INTO pokemons (
   name,
   type1,
   type2,
+  total,
   hp,
   attack,
   defense,
@@ -23,14 +24,15 @@ INSERT INTO pokemons (
   generation,
   legendary  
 ) VALUES (
-  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11
-) RETURNING id, name, type1, type2, hp, attack, defense, sp_atk, sp_def, speed, generation, legendary, created_at
+  $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12
+) RETURNING id, name, type1, type2, total, hp, attack, defense, sp_atk, sp_def, speed, generation, legendary, created_at
 `
 
 type CreatePokemonParams struct {
 	Name       string `json:"name"`
 	Type1      string `json:"type1"`
 	Type2      string `json:"type2"`
+	Total      int32  `json:"total"`
 	Hp         int32  `json:"hp"`
 	Attack     int32  `json:"attack"`
 	Defense    int32  `json:"defense"`
@@ -46,6 +48,7 @@ func (q *Queries) CreatePokemon(ctx context.Context, arg CreatePokemonParams) (P
 		arg.Name,
 		arg.Type1,
 		arg.Type2,
+		arg.Total,
 		arg.Hp,
 		arg.Attack,
 		arg.Defense,
@@ -61,6 +64,7 @@ func (q *Queries) CreatePokemon(ctx context.Context, arg CreatePokemonParams) (P
 		&i.Name,
 		&i.Type1,
 		&i.Type2,
+		&i.Total,
 		&i.Hp,
 		&i.Attack,
 		&i.Defense,
@@ -85,7 +89,7 @@ func (q *Queries) DeletePokemon(ctx context.Context, id int64) error {
 }
 
 const getPokemon = `-- name: GetPokemon :one
-SELECT id, name, type1, type2, hp, attack, defense, sp_atk, sp_def, speed, generation, legendary, created_at FROM pokemons
+SELECT id, name, type1, type2, total, hp, attack, defense, sp_atk, sp_def, speed, generation, legendary, created_at FROM pokemons
 WHERE id = $1 LIMIT 1
 `
 
@@ -97,6 +101,7 @@ func (q *Queries) GetPokemon(ctx context.Context, id int64) (Pokemon, error) {
 		&i.Name,
 		&i.Type1,
 		&i.Type2,
+		&i.Total,
 		&i.Hp,
 		&i.Attack,
 		&i.Defense,
@@ -111,7 +116,7 @@ func (q *Queries) GetPokemon(ctx context.Context, id int64) (Pokemon, error) {
 }
 
 const listPokemons = `-- name: ListPokemons :many
-SELECT id, name, type1, type2, hp, attack, defense, sp_atk, sp_def, speed, generation, legendary, created_at FROM pokemons
+SELECT id, name, type1, type2, total, hp, attack, defense, sp_atk, sp_def, speed, generation, legendary, created_at FROM pokemons
 ORDER BY id
 LIMIT $1
 OFFSET $2
@@ -136,6 +141,7 @@ func (q *Queries) ListPokemons(ctx context.Context, arg ListPokemonsParams) ([]P
 			&i.Name,
 			&i.Type1,
 			&i.Type2,
+			&i.Total,
 			&i.Hp,
 			&i.Attack,
 			&i.Defense,

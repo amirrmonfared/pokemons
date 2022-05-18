@@ -13,6 +13,7 @@ type Pokemon struct {
 	Name       string    `json:"name"`
 	Type1      string    `json:"type1"`
 	Type2      string    `json:"type2"`
+	Total      int32     `json:"total"`
 	Hp         int32     `json:"hp"`
 	Attack     int32     `json:"attack"`
 	Defense    int32     `json:"defense"`

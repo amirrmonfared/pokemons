@@ -3,6 +3,7 @@ CREATE TABLE "pokemons" (
   "name" varchar NOT NULL,
   "type1" varchar NOT NULL,
   "type2" varchar NOT NULL,
+  "total" integer NOT NULL,
   "hp" integer NOT NULL,
   "attack" integer NOT NULL,
   "defense" integer NOT NULL,
