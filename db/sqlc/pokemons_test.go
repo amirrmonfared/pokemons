@@ -88,8 +88,11 @@ func TestListPokemons(t *testing.T) {
 	}
 
 	arg := ListPokemonsParams{
-		Limit:  5,
-		Offset: 0,
+		Limit:   5,
+		Offset:  0,
+		Hp:      100,
+		Attack:  100,
+		Defense: 100,
 	}
 
 	pokemons, err := testQueries.ListPokemons(context.Background(), arg)
