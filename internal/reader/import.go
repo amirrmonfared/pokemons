@@ -49,6 +49,8 @@ func reviewer(path string) ([]*Pokemons, error) {
 	}
 
 	for _, a := range data {
+		str := strings.HasPrefix(a.Name, "G")
+
 		if a.Legendary == true {
 			//Exclude Legendary Pokémon
 			fmt.Printf("Legend Pokemon %s excluded\n", a.Name)
@@ -57,28 +59,28 @@ func reviewer(path string) ([]*Pokemons, error) {
 			//Exclude Pokémon of Type: Ghost
 			fmt.Printf("Ghost Pokemon %s excluded\n", a.Name)
 
-		} else if a.Type2 == "Steel" {
+		} else if a.Type1 == "Steel" || a.Type2 == "Steel" {
 			//For Pokémon of Type: Steel, double their HP
-			a.HP *= 2
+			a.HP = a.HP * 2
 			PokemonsSl = append(PokemonsSl, a)
 
-		} else if a.Type1 == "Fire" {
+		} else if a.Type1 == "Fire" || a.Type2 == "Fire" {
 			//For Pokémon of Type: Fire, lower their Attack by 10%
-			a.Attack -= 10 //TODO Changing to percentt
+			a.Attack = a.Attack - 10 //TODO Changing to percentt
 			PokemonsSl = append(PokemonsSl, a)
 
 		} else if a.Type2 == "Flying" || a.Type1 == "Bug" {
 			//For Pokémon of Type: Bug & Flying, increase their Attack Speed by 10%
-			a.SpAtk += 10
+			a.SpAtk = a.SpAtk + 10
 			PokemonsSl = append(PokemonsSl, a)
 
-		} else if str := strings.HasPrefix("G", a.Name); str == true {
+		} else if str == true { //TODO this if not working
 			//For Pokémon that start with the letter **G**, add +5 Defense for every letter in their name (excluding **G**)
 			outG := strings.ReplaceAll(a.Name, "G", "")
 			outg := strings.ReplaceAll(outG, "g", "")
 
 			for i := 0; i < len(outg); i++ {
-				a.Defense += 5
+				a.Defense = a.Defense + 5
 			}
 			PokemonsSl = append(PokemonsSl, a)
 

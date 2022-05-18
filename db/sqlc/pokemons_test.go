@@ -16,6 +16,7 @@ func createRandomPokemon(t *testing.T) Pokemon {
 		Name:       util.RandomString(4),
 		Type1:      util.RandomString(4),
 		Type2:      util.RandomString(4),
+		Total:      util.RandomInt(200, 400),
 		Hp:         util.RandomInt(1, 200),
 		Attack:     util.RandomInt(1, 100),
 		Defense:    util.RandomInt(1, 100),
@@ -83,7 +84,7 @@ func TestDeletePokemon(t *testing.T) {
 
 func TestListPokemons(t *testing.T) {
 	for i := 0; i < 10; i++ {
-	createRandomPokemon(t)
+		createRandomPokemon(t)
 	}
 
 	arg := ListPokemonsParams{

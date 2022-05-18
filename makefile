@@ -22,4 +22,7 @@ test:
 server:
 	go run main.go
 
-.PHONY: createdb container dropdb migrateup migratedown sqlc test server
+mock:
+	mockgen -destination db/mock/store.go github.com/amirrmonfared/pokemons/db/sqlc Store
+
+.PHONY: createdb container dropdb migrateup migratedown sqlc test server mock
