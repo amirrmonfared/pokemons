@@ -6,6 +6,7 @@ import (
 	"github.com/gocarina/gocsv"
 )
 
+// Exporter exporting the data from csv file
 func Exporter(path string) ([]*Pokemons, error) {
 	file, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE, os.ModePerm)
 	if err != nil {

@@ -12,6 +12,7 @@ import (
 
 var PokemonsSl = make([]*Pokemons, 0, 700)
 
+// Importer is importing data to database
 func Impoerter(conn *sql.DB, path string) error {
 	store := db.NewStore(conn)
 	data, err := reviewer(path)
@@ -41,7 +42,7 @@ func Impoerter(conn *sql.DB, path string) error {
 	return nil
 }
 
-//reviewer checking if rules
+// reviewer checking if rules
 func reviewer(path string) ([]*Pokemons, error) {
 	data, err := Exporter(path)
 	if err != nil {
