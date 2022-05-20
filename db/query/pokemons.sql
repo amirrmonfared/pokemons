@@ -30,6 +30,11 @@ ORDER BY id
 LIMIT $1
 OFFSET $2;
 
+-- name: ListPokemonsByAbility :many
+SELECT * FROM pokemons
+WHERE hp = $1 OR attack = $2 OR defense = $3
+ORDER BY id;
+
 -- name: DeletePokemon :exec
 DELETE FROM pokemons
 WHERE id = $1;

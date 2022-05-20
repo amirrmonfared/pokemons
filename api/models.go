@@ -1,9 +1,12 @@
-package api 
+package api
 
 type userRequest struct {
 	Name     string `form:"name"`
 	PageID   int32  `form:"page_id"`
 	PageSize int32  `form:"page_size"`
+	Hp       int32  `form:"hp"`
+	Attack   int32  `form:"attack"`
+	Defense  int32  `form:"defense"`
 }
 
 type listPokemonRequest struct {
@@ -15,3 +18,8 @@ type listPokemonByNameRequest struct {
 	Name string `form:"name" binding:"required"`
 }
 
+type listPokemonByAbilityRequest struct {
+	Hp       int32  `form:"hp"`
+	Attack   int32  `form:"attack"`
+	Defense  int32  `form:"defense"`
+}

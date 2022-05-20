@@ -14,6 +14,7 @@ type Querier interface {
 	GetPokemon(ctx context.Context, id int64) (Pokemon, error)
 	GetPokemonByName(ctx context.Context, name string) (Pokemon, error)
 	ListPokemons(ctx context.Context, arg ListPokemonsParams) ([]Pokemon, error)
+	ListPokemonsByAbility(ctx context.Context, arg ListPokemonsByAbilityParams) ([]Pokemon, error)
 }
 
 var _ Querier = (*Queries)(nil)

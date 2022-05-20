@@ -191,3 +191,54 @@ func (q *Queries) ListPokemons(ctx context.Context, arg ListPokemonsParams) ([]P
 	}
 	return items, nil
 }
+
+const listPokemonsByAbility = `-- name: ListPokemonsByAbility :many
+SELECT id, name, type1, type2, total, hp, attack, defense, sp_atk, sp_def, speed, generation, legendary, created_at FROM pokemons
+WHERE hp = $1 OR attack = $2 OR defense = $3
+
+ORDER BY id
+`
+
+type ListPokemonsByAbilityParams struct {
+	Hp      int32 `json:"hp"`
+	Attack  int32 `json:"attack"`
+	Defense int32 `json:"defense"`
+}
+
+func (q *Queries) ListPokemonsByAbility(ctx context.Context, arg ListPokemonsByAbilityParams) ([]Pokemon, error) {
+	rows, err := q.db.QueryContext(ctx, listPokemonsByAbility, arg.Hp, arg.Attack, arg.Defense)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Pokemon{}
+	for rows.Next() {
+		var i Pokemon
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Type1,
+			&i.Type2,
+			&i.Total,
+			&i.Hp,
+			&i.Attack,
+			&i.Defense,
+			&i.SpAtk,
+			&i.SpDef,
+			&i.Speed,
+			&i.Generation,
+			&i.Legendary,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

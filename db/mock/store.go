@@ -123,3 +123,18 @@ func (mr *MockStoreMockRecorder) ListPokemons(arg0, arg1 interface{}) *gomock.Ca
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListPokemons", reflect.TypeOf((*MockStore)(nil).ListPokemons), arg0, arg1)
 }
+
+// ListPokemonsByAbility mocks base method.
+func (m *MockStore) ListPokemonsByAbility(arg0 context.Context, arg1 db.ListPokemonsByAbilityParams) ([]db.Pokemon, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListPokemonsByAbility", arg0, arg1)
+	ret0, _ := ret[0].([]db.Pokemon)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListPokemonsByAbility indicates an expected call of ListPokemonsByAbility.
+func (mr *MockStoreMockRecorder) ListPokemonsByAbility(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListPokemonsByAbility", reflect.TypeOf((*MockStore)(nil).ListPokemonsByAbility), arg0, arg1)
+}
