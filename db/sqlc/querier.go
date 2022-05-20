@@ -12,6 +12,7 @@ type Querier interface {
 	CreatePokemon(ctx context.Context, arg CreatePokemonParams) (Pokemon, error)
 	DeletePokemon(ctx context.Context, id int64) error
 	GetPokemon(ctx context.Context, id int64) (Pokemon, error)
+	GetPokemonByName(ctx context.Context, name string) (Pokemon, error)
 	ListPokemons(ctx context.Context, arg ListPokemonsParams) ([]Pokemon, error)
 }
 

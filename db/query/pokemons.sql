@@ -20,15 +20,15 @@ INSERT INTO pokemons (
 SELECT * FROM pokemons
 WHERE id = $1 LIMIT 1;
 
+-- name: GetPokemonByName :one
+SELECT * FROM pokemons
+WHERE name = $1 LIMIT 1;
+
 -- name: ListPokemons :many
 SELECT * FROM pokemons
-WHERE
-  hp = $1 AND
-  attack = $2 AND
-  defense = $3
 ORDER BY id
-LIMIT $4
-OFFSET $5;
+LIMIT $1
+OFFSET $2;
 
 -- name: DeletePokemon :exec
 DELETE FROM pokemons

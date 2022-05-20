@@ -61,17 +61,11 @@ func TestListPokemonsAPI(t *testing.T) {
 			query: Query{
 				pageID:   1,
 				pageSize: n,
-				hp:       int(pokemons[0].Hp),
-				attack:   int(pokemons[0].Attack),
-				defense:  int(pokemons[0].Defense),
 			},
 			buildStubs: func(store *mockdb.MockStore) {
 				arg := db.ListPokemonsParams{
 					Limit:   int32(n),
 					Offset:  0,
-					Hp:      pokemons[0].Hp,
-					Attack:  pokemons[0].Attack,
-					Defense: pokemons[0].Defense,
 				}
 
 				store.EXPECT().
@@ -126,9 +120,6 @@ func TestListPokemonsAPI(t *testing.T) {
 			q := request.URL.Query()
 			q.Add("page_id", fmt.Sprintf("%d", tc.query.pageID))
 			q.Add("page_size", fmt.Sprintf("%d", tc.query.pageSize))
-			q.Add("hp", fmt.Sprintf("%d", tc.query.hp))
-			q.Add("attack", fmt.Sprintf("%d", tc.query.attack))
-			q.Add("defense", fmt.Sprintf("%d", tc.query.defense))
 			request.URL.RawQuery = q.Encode()
 
 			server.router.ServeHTTP(recorder, request)

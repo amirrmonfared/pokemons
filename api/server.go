@@ -20,7 +20,7 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 	}
 	router := gin.Default()
 
-	router.GET("/pokemon", server.listPokemons)
+	router.GET("/pokemon", server.broker)
 
 	server.router = router
 	return server, nil

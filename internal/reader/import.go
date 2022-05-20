@@ -64,7 +64,7 @@ func reviewer(path string) ([]*Pokemons, error) {
 			//For Pokémon of Type: Steel, double their HP
 			a.HP = a.HP * 2
 			PokemonsSl = append(PokemonsSl, a)
-			
+
 		} else if a.Type1 == "Fire" || a.Type2 == "Fire" {
 			//For Pokémon of Type: Fire, lower their Attack by 10%
 			percent := 10 / float64(a.Attack)

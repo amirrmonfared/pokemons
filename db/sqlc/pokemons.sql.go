@@ -115,33 +115,47 @@ func (q *Queries) GetPokemon(ctx context.Context, id int64) (Pokemon, error) {
 	return i, err
 }
 
+const getPokemonByName = `-- name: GetPokemonByName :one
+SELECT id, name, type1, type2, total, hp, attack, defense, sp_atk, sp_def, speed, generation, legendary, created_at FROM pokemons
+WHERE name = $1 LIMIT 1
+`
+
+func (q *Queries) GetPokemonByName(ctx context.Context, name string) (Pokemon, error) {
+	row := q.db.QueryRowContext(ctx, getPokemonByName, name)
+	var i Pokemon
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Type1,
+		&i.Type2,
+		&i.Total,
+		&i.Hp,
+		&i.Attack,
+		&i.Defense,
+		&i.SpAtk,
+		&i.SpDef,
+		&i.Speed,
+		&i.Generation,
+		&i.Legendary,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const listPokemons = `-- name: ListPokemons :many
 SELECT id, name, type1, type2, total, hp, attack, defense, sp_atk, sp_def, speed, generation, legendary, created_at FROM pokemons
-WHERE
-  hp = $1 AND
-  attack = $2 AND
-  defense = $3
 ORDER BY id
-LIMIT $4
-OFFSET $5
+LIMIT $1
+OFFSET $2
 `
 
 type ListPokemonsParams struct {
-	Hp      int32 `json:"hp"`
-	Attack  int32 `json:"attack"`
-	Defense int32 `json:"defense"`
-	Limit   int32 `json:"limit"`
-	Offset  int32 `json:"offset"`
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
 }
 
 func (q *Queries) ListPokemons(ctx context.Context, arg ListPokemonsParams) ([]Pokemon, error) {
-	rows, err := q.db.QueryContext(ctx, listPokemons,
-		arg.Hp,
-		arg.Attack,
-		arg.Defense,
-		arg.Limit,
-		arg.Offset,
-	)
+	rows, err := q.db.QueryContext(ctx, listPokemons, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}

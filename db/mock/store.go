@@ -79,6 +79,21 @@ func (mr *MockStoreMockRecorder) GetPokemon(arg0, arg1 interface{}) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPokemon", reflect.TypeOf((*MockStore)(nil).GetPokemon), arg0, arg1)
 }
 
+// GetPokemonByName mocks base method.
+func (m *MockStore) GetPokemonByName(arg0 context.Context, arg1 string) (db.Pokemon, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetPokemonByName", arg0, arg1)
+	ret0, _ := ret[0].(db.Pokemon)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetPokemonByName indicates an expected call of GetPokemonByName.
+func (mr *MockStoreMockRecorder) GetPokemonByName(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPokemonByName", reflect.TypeOf((*MockStore)(nil).GetPokemonByName), arg0, arg1)
+}
+
 // ImportPokemon mocks base method.
 func (m *MockStore) ImportPokemon(arg0 context.Context, arg1 db.CreatePokemonParams) (db.CreatePokemonResult, error) {
 	m.ctrl.T.Helper()

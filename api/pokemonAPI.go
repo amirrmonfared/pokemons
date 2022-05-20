@@ -7,12 +7,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type listPokemonRequest struct {
-	PageID   int32 `form:"page_id" binding:"required,min=1"`
-	PageSize int32 `form:"page_size" binding:"required,min=10"`
-	HP       int32 `form:"hp" binding:"required"`
-	Attack   int32 `form:"attack" binding:"required"`
-	Defense  int32 `form:"defense" binding:"required"`
+func (server *Server) broker(ctx *gin.Context) {
+	var req userRequest
+	if err := ctx.ShouldBindQuery(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	if req.Name != "" {
+		server.getPokemonByName(ctx)
+	}
+	if req.PageID != 0 {
+		server.listPokemons(ctx)
+	}
 }
 
 func (server *Server) listPokemons(ctx *gin.Context) {
@@ -22,15 +29,32 @@ func (server *Server) listPokemons(ctx *gin.Context) {
 		return
 	}
 
+	if req.PageSize == 0 {
+		req.PageSize = 10
+	}
+
 	arg := db.ListPokemonsParams{
-		Hp:      req.HP,
-		Attack:  req.Attack,
-		Defense: req.Defense,
-		Limit:   req.PageSize,
-		Offset:  (req.PageID - 1) * req.PageSize,
+		Limit:  req.PageSize,
+		Offset: (req.PageID - 1) * req.PageSize,
 	}
 
 	pokemons, err := server.store.ListPokemons(ctx, arg)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, pokemons)
+}
+
+func (server *Server) getPokemonByName(ctx *gin.Context) {
+	var req listPokemonByNameRequest
+	if err := ctx.ShouldBindQuery(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	pokemons, err := server.store.GetPokemonByName(ctx, req.Name)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
