@@ -15,13 +15,13 @@ func (server *Server) broker(ctx *gin.Context) {
 		return
 	}
 
-	if req.Name != "" {
+	if req.Name != "" { // in case of filter pokemon by name
 		server.getPokemonByName(ctx)
 	}
-	if req.PageID != 0 {
+	if req.PageID != 0 { // in case of listing pokemons
 		server.listPokemons(ctx)
 	}
-	if req.Hp == 0 || req.Attack == 0 || req.Defense == 0 {
+	if req.Hp != 0 || req.Attack != 0 || req.Defense != 0 { // in case of filter pokemons by their ability
 		server.getPokemonByAbility(ctx)
 	}
 }

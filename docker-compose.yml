@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+
+  pokemon-service:
+    build:
+      context: .
+      dockerfile: dockerfile
+    restart: always
+    ports:
+      - "8080:80"
+    deploy:
+      mode: replicated
+      replicas: 1
+
+
+  postgres:
+    image: 'postgres:14.2'
+    ports:
+      - "5434:5432"
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: pokemons
+    volumes:
+      - ./db-data/postgres/:/var/lib/postgresql/data/
