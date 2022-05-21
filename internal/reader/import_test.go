@@ -13,6 +13,6 @@ func TestReviewer(t *testing.T) {
 }
 
 func TestImporter(t *testing.T) {
-	err := Impoerter(testDB, path)
+	err := Impoerter(testStore, path)
 	require.NoError(t, err)
 }

@@ -7,6 +7,7 @@ import (
 
 	"github.com/amirrmonfared/pokemons/api"
 	db "github.com/amirrmonfared/pokemons/db/sqlc"
+	"github.com/amirrmonfared/pokemons/internal/reader"
 	"github.com/amirrmonfared/pokemons/util"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -36,7 +37,7 @@ func main() {
 		fmt.Println("cannot connect to server", err)
 	}
 
-	//go reader.Impoerter(conn, path)
+	go reader.Impoerter(store, path)
 
 	err = server.Start(config.ServerAddress)
 	if err != nil {

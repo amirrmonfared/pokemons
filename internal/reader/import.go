@@ -2,7 +2,6 @@ package reader
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"log"
 	"strings"
@@ -13,27 +12,26 @@ import (
 var PokemonsSl = make([]*Pokemons, 0, 700)
 
 // Importer is importing data to database
-func Impoerter(conn *sql.DB, path string) error {
-	store := db.NewStore(conn)
+func Impoerter(store db.Store, path string) error {
 	data, err := reviewer(path)
 	if err != nil {
 		log.Println(err)
 	}
 
-	for _, a := range data {
+	for _, pk := range data {
 		store.ImportPokemon(context.Background(), db.CreatePokemonParams{
-			Name:       a.Name,
-			Type1:      a.Type1,
-			Type2:      a.Type2,
-			Total:      a.Total,
-			Hp:         a.HP,
-			Attack:     a.Attack,
-			Defense:    a.Defense,
-			SpAtk:      a.SpAtk,
-			SpDef:      a.SpDef,
-			Speed:      a.Speed,
-			Generation: a.Generation,
-			Legendary:  a.Legendary,
+			Name:       pk.Name,
+			Type1:      pk.Type1,
+			Type2:      pk.Type2,
+			Total:      pk.Total,
+			Hp:         pk.HP,
+			Attack:     pk.Attack,
+			Defense:    pk.Defense,
+			SpAtk:      pk.SpAtk,
+			SpDef:      pk.SpDef,
+			Speed:      pk.Speed,
+			Generation: pk.Generation,
+			Legendary:  pk.Legendary,
 		})
 	}
 
@@ -42,68 +40,60 @@ func Impoerter(conn *sql.DB, path string) error {
 	return nil
 }
 
-// reviewer checking if rules
 func reviewer(path string) ([]*Pokemons, error) {
 	data, err := Exporter(path)
 	if err != nil {
 		log.Println(err)
 	}
 
-	for _, a := range data {
-		str := strings.Split(a.Name, "")
+	for _, pk := range data {
 
-		if a.Legendary == true {
-			//Exclude Legendary Pokémon
-			fmt.Printf("Legend Pokemon %s excluded\n", a.Name)
-
-		} else if a.Type1 == "Ghost" || a.Type2 == "Ghost" {
-			//Exclude Pokémon of Type: Ghost
-			fmt.Printf("Ghost Pokemon %s excluded\n", a.Name)
-
-		} else if a.Type1 == "Steel" || a.Type2 == "Steel" {
-			//For Pokémon of Type: Steel, double their HP
-			a.HP = a.HP * 2
-			PokemonsSl = append(PokemonsSl, a)
-
-		} else if a.Type1 == "Fire" || a.Type2 == "Fire" {
-			//For Pokémon of Type: Fire, lower their Attack by 10%
-			percent := 10 / float64(a.Attack)
-			real := percent * 100
-			sub := float64(a.Attack) - real
-			a.Attack = int32(sub)
-			PokemonsSl = append(PokemonsSl, a)
-
-		} else if a.Type2 == "Flying" || a.Type1 == "Flying" {
-			//For Pokémon of Type: Flying, increase their Attack Speed by 10%
-			percent := 10 / float64(a.SpAtk)
-			real := percent * 100
-			sum := float64(a.SpAtk) + real
-			a.SpAtk = int32(sum)
-			PokemonsSl = append(PokemonsSl, a)
-
-		} else if a.Type2 == "Bug" || a.Type1 == "Bug" {
-			//For Pokémon of Type: Bug, increase their Attack Speed by 10%
-			percent := 10 / float64(a.SpAtk)
-			real := percent * 100
-			sum := float64(a.SpAtk) + real
-			a.SpAtk = int32(sum)
-			PokemonsSl = append(PokemonsSl, a)
-
-		} else if str[0] == "G" {
-			//For Pokémon that start with the letter **G**, add +5 Defense for every letter in their name (excluding **G**)
-			outG := strings.ReplaceAll(a.Name, "G", "")
+		if pk.Legendary == true {
+			fmt.Printf("Legend Pokemon %s excluded\n", pk.Name)
+		}
+		if isTrue(pk.Type1, pk.Type2, "Ghost") == true {
+			fmt.Printf("Ghost Pokemon %s excluded\n", pk.Name)
+		}
+		if isTrue(pk.Type1, pk.Type2, "Steel") == true {
+			pk.HP = pk.HP * 2
+		}
+		if isTrue(pk.Type1, pk.Type2, "Fire") {
+			pk.Attack = decreaseByPercentage(pk.Attack)
+		}
+		if isTrue(pk.Type1, pk.Type2, "Flying") || isTrue(pk.Type1, pk.Type2, "Bug") {
+			pk.SpAtk = increaseByPercentage(pk.SpAtk)
+		}
+		if str := strings.Split(pk.Name, ""); str[0] == "G" {
+			outG := strings.ReplaceAll(pk.Name, "G", "")
 			outg := strings.ReplaceAll(outG, "g", "")
 
 			for i := 0; i < len(outg); i++ {
-				a.Defense = a.Defense + 5
+				pk.Defense = pk.Defense + 5
 			}
-			PokemonsSl = append(PokemonsSl, a)
-
-		} else {
-
-			PokemonsSl = append(PokemonsSl, a)
 		}
+		PokemonsSl = append(PokemonsSl, pk)
 	}
 
 	return PokemonsSl, nil
+}
+
+func isTrue(pokemonType1, pokemonType2 string, expectedType string) bool {
+	if pokemonType1 == expectedType || pokemonType2 == expectedType {
+		return true
+	}
+	return false
+}
+
+func decreaseByPercentage(a int32) int32 {
+	percent := 10 / float64(a)
+	real := percent * 100
+	sub := float64(a) - real
+	return int32(sub)
+}
+
+func increaseByPercentage(a int32) int32 {
+	percent := 10 / float64(a)
+	real := percent * 100
+	sub := float64(a) + real
+	return int32(sub)
 }

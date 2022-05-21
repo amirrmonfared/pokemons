@@ -13,6 +13,7 @@ import (
 
 var testQueries *db.Queries
 var testDB *sql.DB
+var testStore db.Store
 
 func TestMain(m *testing.M) {
 	config, err := util.LoadConfig("../..")
